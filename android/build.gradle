@@ -1,0 +1,55 @@
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.4'
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        maven { url 'https://maven.google.com' }
+        maven { url 'https://jitpack.io' }
+        mavenLocal()
+        jcenter()
+    }
+
+    configurations.all {
+        resolutionStrategy.force "com.android.support:support-v4:27.1.1"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation 'com.cashlez.android:cashlez:1.5.3.9'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.facebook.react:react-native:+'
+    testImplementation 'junit:junit:4.12'
+}
+
+  
