@@ -50,6 +50,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.facebook.react:react-native:+'
     testImplementation 'junit:junit:4.12'
+    implementation 'com.google.zxing:core:3.2.1'
 }
 
   
