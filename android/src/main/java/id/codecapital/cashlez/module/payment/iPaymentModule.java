@@ -1,6 +1,5 @@
 package id.codecapital.cashlez.module.payment;
 
-import com.cashlez.android.sdk.CLPayment;
 import com.facebook.react.bridge.Promise;
 
 public interface iPaymentModule {

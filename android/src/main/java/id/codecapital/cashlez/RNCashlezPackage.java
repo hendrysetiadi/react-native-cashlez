@@ -12,6 +12,7 @@ import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
 
 import id.codecapital.cashlez.module.authentication.AuthenticationModule;
+import id.codecapital.cashlez.module.ovo.OvoModule;
 import id.codecapital.cashlez.module.payment.PaymentModule;
 
 public class RNCashlezPackage implements ReactPackage {
@@ -20,7 +21,8 @@ public class RNCashlezPackage implements ReactPackage {
       return Arrays.<NativeModule>asList(
               new RNCashlezModule(reactContext),
               new AuthenticationModule(reactContext),
-              new PaymentModule(reactContext)
+              new PaymentModule(reactContext),
+              new OvoModule(reactContext)
       );
     }
 
