@@ -12,13 +12,15 @@ import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
 
 import id.codecapital.cashlez.module.authentication.AuthenticationModule;
+import id.codecapital.cashlez.module.payment.PaymentModule;
 
 public class RNCashlezPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
       return Arrays.<NativeModule>asList(
               new RNCashlezModule(reactContext),
-              new AuthenticationModule(reactContext)
+              new AuthenticationModule(reactContext),
+              new PaymentModule(reactContext)
       );
     }
 

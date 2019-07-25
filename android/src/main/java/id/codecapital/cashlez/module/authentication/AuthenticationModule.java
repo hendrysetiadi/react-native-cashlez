@@ -1,5 +1,10 @@
 package id.codecapital.cashlez.module.authentication;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+
 import com.cashlez.android.sdk.CLErrorResponse;
 import com.cashlez.android.sdk.CLPaymentCapability;
 import com.cashlez.android.sdk.login.CLLoginHandler;
@@ -16,6 +21,7 @@ import id.codecapital.cashlez.module.ApplicationState;
 
 public class AuthenticationModule extends ReactContextBaseJavaModule implements ICLLoginService, iAuthenticationModule {
     private final ReactApplicationContext reactContext;
+    private static final int MY_PERMISSIONS_REQUEST = 8;
     private ICLLoginHandler mCLLoginHandler;
     private Promise mPromise;
 
@@ -37,6 +43,18 @@ public class AuthenticationModule extends ReactContextBaseJavaModule implements 
         if (mCLLoginHandler == null) {
             this.mCLLoginHandler = new CLLoginHandler(getCurrentActivity(), this);
         }
+
+        // Check for Location Permission
+        if ((ContextCompat.checkSelfPermission(this.reactContext, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+                || (ContextCompat.checkSelfPermission(this.reactContext, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(getCurrentActivity(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST);
+        }
+
+        promise.resolve(true);
     }
 
     @ReactMethod

@@ -1,8 +1,9 @@
 
 import { NativeModules } from 'react-native';
 
-const { RNCashlezAuthentication } = NativeModules;
+const { RNCashlezAuthentication, RNCashlezPayment } = NativeModules;
 
 export {
 	RNCashlezAuthentication,
+	RNCashlezPayment,
 };
