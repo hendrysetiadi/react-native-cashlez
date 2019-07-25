@@ -18,4 +18,6 @@ public interface iPaymentModule {
     void doPayLocalCardPin(String amount, String description, Promise promise);
     void doPayLocalCardNoPin(String amount, String description, Promise promise);
     void doPayInternationalCard(String amount, String description, Promise promise);
+
+    void doPrintPayment(Promise promise);
 }

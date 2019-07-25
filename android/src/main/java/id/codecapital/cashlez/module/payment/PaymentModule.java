@@ -38,6 +38,7 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
 
     private final ReactApplicationContext reactContext;
     private ICLPaymentHandler mCLPaymentHandler;
+    private CLPaymentResponse mCLPaymentResponse;
     private Promise mPromise;
 
     public PaymentModule(ReactApplicationContext reactContext) {
@@ -228,6 +229,8 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
 
     @Override
     public void onCashPaymentSuccess(CLPaymentResponse clPaymentResponse) {
+        this.mCLPaymentResponse = clPaymentResponse;
+
         String message = clPaymentResponse.getMessage();
 
         WritableMap map = new WritableNativeMap();
@@ -326,6 +329,8 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
 
     @Override
     public void onPaymentSuccess(CLPaymentResponse clPaymentResponse) {
+        this.mCLPaymentResponse = clPaymentResponse;
+
         if (clPaymentResponse.getTransactionStatus() != null
                 && (clPaymentResponse.getTransactionStatus() == ApprovalStatus.APPROVED.getCode()
                     || clPaymentResponse.getTransactionStatus() == ApprovalStatus.PENDING.getCode())) {
@@ -361,6 +366,20 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
         map.putString(Const.RETURN_MESSAGE_KEY, errorMessage);
 
         mPromise.resolve(map);
+    }
+
+
+
+    @ReactMethod
+    @Override
+    public void doPrintPayment(Promise promise) {
+        this.mPromise = promise;
+
+        if (mCLPaymentResponse != null) {
+            mCLPaymentHandler.doPrint(mCLPaymentResponse);
+        } else {
+            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG);
+        }
     }
 
 
