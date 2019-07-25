@@ -15,8 +15,11 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 
 import id.codecapital.cashlez.module.ApplicationState;
+import id.codecapital.cashlez.module.Const;
 
 
 public class AuthenticationModule extends ReactContextBaseJavaModule implements ICLLoginService, iAuthenticationModule {
@@ -39,7 +42,7 @@ public class AuthenticationModule extends ReactContextBaseJavaModule implements 
 
     @ReactMethod
     @Override
-    public void init(Promise promise) {
+    public void init() {
         if (mCLLoginHandler == null) {
             this.mCLLoginHandler = new CLLoginHandler(getCurrentActivity(), this);
         }
@@ -53,9 +56,9 @@ public class AuthenticationModule extends ReactContextBaseJavaModule implements 
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST);
         }
-
-        promise.resolve(true);
     }
+
+
 
     @ReactMethod
     @Override
@@ -83,27 +86,51 @@ public class AuthenticationModule extends ReactContextBaseJavaModule implements 
         CLPaymentCapability paymentCapability = clLoginResponse.getPaymentCapability();
         ApplicationState.getInstance().setPaymentCapability(paymentCapability);
 
-        mPromise.resolve(true);
+
+        WritableMap map = new WritableNativeMap();
+        map.putBoolean(Const.RETURN_SUCCESS_KEY, true);
+        map.putString(Const.RETURN_CODE_KEY, null);
+        map.putString(Const.RETURN_MESSAGE_KEY, "Cashlez Account has been Authenticated successfuly");
+
+        mPromise.resolve(map);
     }
 
     @Override
     public void onLoginError(CLErrorResponse clErrorResponse) {
         String errorCode = "" + clErrorResponse.getErrorCode();
         String errorMessage = errorCode + ": " + clErrorResponse.getErrorMessage();
-        mPromise.reject(errorCode, errorMessage);
+
+        WritableMap map = new WritableNativeMap();
+        map.putBoolean(Const.RETURN_SUCCESS_KEY, false);
+        map.putString(Const.RETURN_CODE_KEY, errorCode);
+        map.putString(Const.RETURN_MESSAGE_KEY, errorMessage);
+
+        mPromise.resolve(map);
     }
 
     @Override
     public void onNewVersionAvailable(CLErrorResponse clErrorResponse) {
         String errorCode = "" + clErrorResponse.getErrorCode();
         String errorMessage = errorCode + ": " + clErrorResponse.getErrorMessage();
-        mPromise.reject(errorCode, errorMessage);
+
+        WritableMap map = new WritableNativeMap();
+        map.putBoolean(Const.RETURN_SUCCESS_KEY, false);
+        map.putString(Const.RETURN_CODE_KEY, errorCode);
+        map.putString(Const.RETURN_MESSAGE_KEY, errorMessage);
+
+        mPromise.resolve(map);
     }
 
     @Override
     public void onApplicationExpired(CLErrorResponse clErrorResponse) {
         String errorCode = "" + clErrorResponse.getErrorCode();
         String errorMessage = errorCode + ": " + clErrorResponse.getErrorMessage();
-        mPromise.reject(errorCode, errorMessage);
+
+        WritableMap map = new WritableNativeMap();
+        map.putBoolean(Const.RETURN_SUCCESS_KEY, false);
+        map.putString(Const.RETURN_CODE_KEY, errorCode);
+        map.putString(Const.RETURN_MESSAGE_KEY, errorMessage);
+
+        mPromise.resolve(map);
     }
 }

@@ -26,6 +26,10 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
+
+import id.codecapital.cashlez.module.Const;
 
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
 
@@ -88,7 +92,13 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
                 String message = String.format("Reader Connection Status: %s\nMessage: %s",
                         String.valueOf(clReaderCompanion.isConnected()),
                         clReaderCompanion.getMessage());
-                mPromise.resolve(message);
+
+                WritableMap map = new WritableNativeMap();
+                map.putBoolean(Const.RETURN_SUCCESS_KEY, true);
+                map.putString(Const.RETURN_CODE_KEY, null);
+                map.putString(Const.RETURN_MESSAGE_KEY, message);
+
+                mPromise.resolve(map);
             }
         });
     }
@@ -100,7 +110,13 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
             public void run() {
                 String errorCode = "" + clErrorResponse.getErrorCode();
                 String errorMessage = errorCode + ": " + clErrorResponse.getErrorMessage();
-                mPromise.reject(errorCode, errorMessage);
+
+                WritableMap map = new WritableNativeMap();
+                map.putBoolean(Const.RETURN_SUCCESS_KEY, false);
+                map.putString(Const.RETURN_CODE_KEY, errorCode);
+                map.putString(Const.RETURN_MESSAGE_KEY, errorMessage);
+
+                mPromise.resolve(map);
             }
         });
     }
@@ -119,18 +135,40 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
     }
 
     @Override
-    public void onPrinterSuccess(CLPrinterCompanion clPrinterCompanion) {
-        String message = String.format("Printer Connection Status: %s\nMessage: %s",
-                String.valueOf(clPrinterCompanion.isConnected()),
-                clPrinterCompanion.getMessage());
-        mPromise.resolve(message);
+    public void onPrinterSuccess(final CLPrinterCompanion clPrinterCompanion) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String message = String.format("Printer Connection Status: %s\nMessage: %s",
+                        String.valueOf(clPrinterCompanion.isConnected()),
+                        clPrinterCompanion.getMessage());
+
+                WritableMap map = new WritableNativeMap();
+                map.putBoolean(Const.RETURN_SUCCESS_KEY, true);
+                map.putString(Const.RETURN_CODE_KEY, null);
+                map.putString(Const.RETURN_MESSAGE_KEY, message);
+
+                mPromise.resolve(map);
+            }
+        });
     }
 
     @Override
-    public void onPrinterError(CLErrorResponse clErrorResponse) {
-        String errorCode = "" + clErrorResponse.getErrorCode();
-        String errorMessage = errorCode + ": " + clErrorResponse.getErrorMessage();
-        mPromise.reject(errorCode, errorMessage);
+    public void onPrinterError(final CLErrorResponse clErrorResponse) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String errorCode = "" + clErrorResponse.getErrorCode();
+                String errorMessage = errorCode + ": " + clErrorResponse.getErrorMessage();
+
+                WritableMap map = new WritableNativeMap();
+                map.putBoolean(Const.RETURN_SUCCESS_KEY, false);
+                map.putString(Const.RETURN_CODE_KEY, errorCode);
+                map.putString(Const.RETURN_MESSAGE_KEY, errorMessage);
+
+                mPromise.resolve(map);
+            }
+        });
     }
 
 
@@ -191,14 +229,26 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
     @Override
     public void onCashPaymentSuccess(CLPaymentResponse clPaymentResponse) {
         String message = clPaymentResponse.getMessage();
-        mPromise.resolve(message);
+
+        WritableMap map = new WritableNativeMap();
+        map.putBoolean(Const.RETURN_SUCCESS_KEY, true);
+        map.putString(Const.RETURN_CODE_KEY, null);
+        map.putString(Const.RETURN_MESSAGE_KEY, message);
+
+        mPromise.resolve(map);
     }
 
     @Override
     public void onCashPaymentError(CLErrorResponse clErrorResponse) {
         String errorCode = "" + clErrorResponse.getErrorCode();
         String errorMessage = errorCode + ": " + clErrorResponse.getErrorMessage();
-        mPromise.reject(errorCode, errorMessage);
+
+        WritableMap map = new WritableNativeMap();
+        map.putBoolean(Const.RETURN_SUCCESS_KEY, false);
+        map.putString(Const.RETURN_CODE_KEY, errorCode);
+        map.putString(Const.RETURN_MESSAGE_KEY, errorMessage);
+
+        mPromise.resolve(map);
     }
 
 
@@ -276,15 +326,27 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
 
     @Override
     public void onPaymentSuccess(CLPaymentResponse clPaymentResponse) {
-        String message = clPaymentResponse.getMessage();
-
         if (clPaymentResponse.getTransactionStatus() != null
                 && (clPaymentResponse.getTransactionStatus() == ApprovalStatus.APPROVED.getCode()
                     || clPaymentResponse.getTransactionStatus() == ApprovalStatus.PENDING.getCode())) {
-                mPromise.resolve(message);
+            String message = clPaymentResponse.getMessage();
+
+            WritableMap map = new WritableNativeMap();
+            map.putBoolean(Const.RETURN_SUCCESS_KEY, true);
+            map.putString(Const.RETURN_CODE_KEY, null);
+            map.putString(Const.RETURN_MESSAGE_KEY, message);
+
+            mPromise.resolve(map);
         } else {
             String errorCode = "" + clPaymentResponse.getErrorCode();
-            mPromise.reject(errorCode, message);
+            String errorMessage = errorCode + ": " + clPaymentResponse.getErrorMessage();
+
+            WritableMap map = new WritableNativeMap();
+            map.putBoolean(Const.RETURN_SUCCESS_KEY, false);
+            map.putString(Const.RETURN_CODE_KEY, errorCode);
+            map.putString(Const.RETURN_MESSAGE_KEY, errorMessage);
+
+            mPromise.resolve(map);
         }
     }
 
@@ -292,8 +354,15 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
     public void onPaymentError(CLErrorResponse clErrorResponse, String transactionId) {
         String errorCode = "" + clErrorResponse.getErrorCode();
         String errorMessage = errorCode + ": Transaction ID " + transactionId + " --> " + clErrorResponse.getErrorMessage();
-        mPromise.reject(errorCode, errorMessage);
+
+        WritableMap map = new WritableNativeMap();
+        map.putBoolean(Const.RETURN_SUCCESS_KEY, false);
+        map.putString(Const.RETURN_CODE_KEY, errorCode);
+        map.putString(Const.RETURN_MESSAGE_KEY, errorMessage);
+
+        mPromise.resolve(map);
     }
+
 
 
     @Override
