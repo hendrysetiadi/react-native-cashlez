@@ -146,7 +146,7 @@ public class LinkAjaModule extends ReactContextBaseJavaModule implements iLinkAj
         if (mCLLinkAjaResponse != null) {
             mCLLinkAjaHandler.doCheckTCashQRStatus(mCLLinkAjaResponse);
         } else {
-            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG);
+            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG).show();
         }
     }
 

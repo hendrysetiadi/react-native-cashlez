@@ -73,7 +73,7 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
         this.mPromise = promise;
 
         if (mCLPaymentHandler == null) {
-            Toast.makeText(reactContext, "Payment Handler is null. Please init the Payment", Toast.LENGTH_LONG);
+            Toast.makeText(reactContext, "Payment Handler is null. Please init the Payment", Toast.LENGTH_LONG).show();
         } else {
             mCLPaymentHandler.doCheckReaderCompanion();
         }
@@ -196,7 +196,7 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
         this.mPromise = promise;
 
         if (mCLPaymentHandler == null) {
-            Toast.makeText(reactContext, "Payment Handler is null. Please init the Payment", Toast.LENGTH_LONG);
+            Toast.makeText(reactContext, "Payment Handler is null. Please init the Payment", Toast.LENGTH_LONG).show();
         } else {
             mCLPaymentHandler.doStartPayment(this);
         }
@@ -303,17 +303,17 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
 
     @Override
     public void onInsertCreditCard(CLPaymentResponse clPaymentResponse) {
-        Toast.makeText(this.reactContext, clPaymentResponse.getMessage(), Toast.LENGTH_LONG);
+        Toast.makeText(this.reactContext, clPaymentResponse.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onInsertOrSwipeDebitCard(CLPaymentResponse clPaymentResponse) {
-        Toast.makeText(this.reactContext, clPaymentResponse.getMessage(), Toast.LENGTH_LONG);
+        Toast.makeText(this.reactContext, clPaymentResponse.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onSwipeDebitCard(CLPaymentResponse clPaymentResponse) {
-        Toast.makeText(this.reactContext, clPaymentResponse.getMessage(), Toast.LENGTH_LONG);
+        Toast.makeText(this.reactContext, clPaymentResponse.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -321,7 +321,7 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(reactContext, removeCardResponse, Toast.LENGTH_LONG);
+                Toast.makeText(reactContext, removeCardResponse, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -378,7 +378,7 @@ public class PaymentModule extends ReactContextBaseJavaModule implements ICLPaym
         if (mCLPaymentResponse != null) {
             mCLPaymentHandler.doPrint(mCLPaymentResponse);
         } else {
-            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG);
+            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG).show();
         }
     }
 

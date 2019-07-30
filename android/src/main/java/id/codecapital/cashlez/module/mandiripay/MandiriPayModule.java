@@ -145,7 +145,7 @@ public class MandiriPayModule extends ReactContextBaseJavaModule implements iMan
         if (mCLMandiriPayResponse != null) {
             mCLMandiriPayHandler.doCheckMandiriPayStatus(mCLMandiriPayResponse);
         } else {
-            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG);
+            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -192,7 +192,7 @@ public class MandiriPayModule extends ReactContextBaseJavaModule implements iMan
         if (mCLMandiriPayResponse != null) {
             mCLMandiriPayHandler.doPrintMandiriPay(mCLMandiriPayResponse);
         } else {
-            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG);
+            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG).show();
         }
     }
 

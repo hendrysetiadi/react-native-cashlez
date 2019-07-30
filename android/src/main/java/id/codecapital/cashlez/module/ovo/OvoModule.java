@@ -115,7 +115,7 @@ public class OvoModule extends ReactContextBaseJavaModule implements ICLOvoServi
         if (mCLPaymentResponse != null) {
             mCLOvoHandler.doOvoInquiry(mCLPaymentResponse);
         } else {
-            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG);
+            Toast.makeText(reactContext, "Invalid Payment Response", Toast.LENGTH_LONG).show();
         }
     }
 
